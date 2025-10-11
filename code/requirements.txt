@@ -1,0 +1,11 @@
+openai
+python-dotenv
+requests
+streamlit
+tavily-python
+serpapi
+agentscope
+dashscope
+pydantic
+hello-agents
+gradio

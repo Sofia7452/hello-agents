@@ -40,9 +40,22 @@ class HelloAgentsLLM:
             
             # 处理流式响应
             print("✅ 大语言模型响应成功:")
+            # print(f"原始响应: {response}")
             collected_content = []
             for chunk in response:
-                content = chunk.choices[0].delta.content or ""
+                # 打印chunk结构
+                # print(f"chunk: {chunk}")
+                # 尝试多种方式获取内容
+                content = ""
+                try:
+                    if hasattr(chunk, "choices") and chunk.choices:
+                        delta = getattr(chunk.choices[0], "delta", None)
+                        if delta and hasattr(delta, "content"):
+                            content = delta.content or ""
+                        elif hasattr(chunk.choices[0], "message") and hasattr(chunk.choices[0].message, "content"):
+                            content = chunk.choices[0].message.content or ""
+                except Exception as e:
+                    print(f"解析chunk出错: {e}")
                 print(content, end="", flush=True)
                 collected_content.append(content)
             print()  # 在流式输出结束后换行
